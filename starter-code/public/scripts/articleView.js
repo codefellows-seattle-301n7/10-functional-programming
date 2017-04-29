@@ -137,7 +137,6 @@ articleView.initAdminPage = function() {
   // appending to the DOM.
   // The callback is not required to return anything.
   Article.numWordsByAuthor().forEach(stat => $('.author-stats').append(template(stat)));
-    console.log("hhhhhhhhhhhhhhhhhhh");
   // REVIEW: Simply write the correct values to the page:
   $('.articles').text(Article.all.length);
   $('#blog-stats.words').text(Article.numWordsAll());
