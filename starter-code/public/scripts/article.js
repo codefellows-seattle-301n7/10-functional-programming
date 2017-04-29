@@ -6,7 +6,7 @@
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
 (function(module){
-  module.Article = Article;
+
   function Article(rawDataObj) {
     /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
     the concept of context.
@@ -57,12 +57,13 @@
       Article.loadAll(results);
       callback();
     }
-  )
+  ).fail(function(e){ console.log(e)})
   };
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
   Article.numWordsAll = () => {
-    return Article.all.map(article => article.body.split(' ')).length.reduce((acc, numbersOfWords)=>{
+    console.log("HEY!!!!!!!!!");
+    return Article.all.map(article => article.body.split(' ').length).reduce((acc, numbersOfWords)=>{
       return acc + numbersOfWords;
     },0);
   };
@@ -79,7 +80,7 @@ Article.allAuthors = () => {
 };
 
 Article.numWordsByAuthor = () => {
-  return Article.allAuthors().map(
+  return Article.allAuthors().map(author =>
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
@@ -87,7 +88,17 @@ Article.numWordsByAuthor = () => {
     // The first property should be pretty straightforward, but you will need to chain
     // some combination of filter, map, and reduce to get the value for the second
     // property.
-  );
+    return {
+      authorName: author,
+      wordsNumber: Article.all.filter(a => {
+        return a.author === author;
+      }).map(article => {
+        return article.body.split(' ').length;
+      }).reduce((acc, words)=> {
+        return acc+words;
+      },0);
+    });
+
 };
 
 Article.truncateTable = callback => {
@@ -134,4 +145,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+  module.Article = Article;
 })(window);
