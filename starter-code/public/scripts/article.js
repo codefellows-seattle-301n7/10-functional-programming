@@ -48,7 +48,7 @@
     Article.all.push(new Article(ele));
   });
   */
-    Article.all = rawData.map(article => {
+    Article.all = rows.map(article => {
       return article;
     });
   };
@@ -60,7 +60,9 @@
         Article.loadAll(results);
         callback();
       }
-    )
+    ).catch (e => {
+      console.log(e);
+    });
   };
 
   // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
@@ -69,7 +71,7 @@
       return article.body.split(' ').length;
     }).reduce((acc, num) => {
       return acc + num;
-    })
+    }, 0)
   };
 
   // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
@@ -78,9 +80,8 @@
     return Article.all.map(article => {
       return article.author;
     }).reduce((prev, curr) => {
-      if (prev.indexOf(curr) < 0) prev.push(curr);
-      return prev;
-    });
+      return (prev.indexOf(curr) < 0) ? prev.concat([curr]) : prev;
+    }, []);
   };
 
   // TODO: Transform each author string into an object with properties for
@@ -93,8 +94,8 @@
   Article.numWordsByAuthor = () => {
     return Article.allAuthors().map(author => {
       return {
-        name:author,
-        words:Article.all.filter(article => {
+        name: author,
+        words: Article.all.filter(article => {
           return article.name === author;
         }).map(article => {
           return article.body.split(' ').length;
@@ -149,4 +150,7 @@
     .then(console.log)
     .then(callback);
   };
+
+  module.Article = Article;
+
 })(window);
