@@ -81,7 +81,20 @@ Article.allAuthors = () => {
 };
 
 Article.numWordsByAuthor = () => {
-  return Article.allAuthors().map(author => {
+  return Article.allAuthors().map((author) => {
+      return {
+        name: author,
+        numWords: Article.all.map((article) => {
+          if (article.author === author) {
+           return article.body.split(' ').length;
+          }
+          return 0;
+        }) .reduce((a, b) => {
+              return  a + b;
+        })
+      }
+    })
+  }
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
@@ -90,8 +103,11 @@ Article.numWordsByAuthor = () => {
     // some combination of filter, map, and reduce to get the value for the second
     // property.
 
-  })
-};
+
+
+//   })
+// };
+
 
 Article.truncateTable = callback => {
   $.ajax({
