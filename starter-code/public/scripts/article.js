@@ -1,4 +1,5 @@
 'use strict';
+(function (module) {
 
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
@@ -41,11 +42,11 @@ Article.loadAll = rows => {
   // There is no need to push to anything.
 
   /* OLD forEach():
-  rawData.forEach(function(ele) {
-  Article.all.push(new Article(ele));
-});
 */
-
+// Article.all = rows.map((ele) => {
+//   return new Article(ele)
+// });
+Article.all = rows.map(ele => new Article(ele));
 };
 
 Article.fetchAll = callback => {
@@ -59,28 +60,45 @@ Article.fetchAll = callback => {
 };
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
+
 Article.numWordsAll = () => {
-  return Article.all.map().reduce()
-};
+    return Article.all.map(obj => {
+      return obj.body.split(' ').length;
+    }).reduce((acc, value) => acc + value)
+  };
+
+
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
+
+
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
-};
+    return Article.all.map(article => article.author)
+        .reduce((names, name) => {
+          if (names.indexOf(name) === -1) names.push(name);
+          return names;
+        }, []);
+  };
 
-Article.numWordsByAuthor = () => {
-  return Article.allAuthors().map(author => {
-    // TODO: Transform each author string into an object with properties for
-    // the author's name, as well as the total number of words across all articles
-    // written by the specified author.
-    // HINT: This .map should be setup to return an object literal with two properties.
-    // The first property should be pretty straightforward, but you will need to chain
-    // some combination of filter, map, and reduce to get the value for the second
-    // property.
 
-  })
-};
+
+  Article.numWordsByAuthor = () => {
+      return Article.allAuthors().map(author => {
+        // DONE: Transform each author string into an obj with properties for
+        // the author's name, as well as the total number of words across all articles
+        // written by the specified author.
+        return {
+          name: author, // DONE: Complete the value for this obj property
+          numWords: Article.all.filter(obj => obj.author === author)
+                               .map(obj => obj.body.split(' ').length)
+                               .reduce((previous, current) => previous + current),
+          numArticles: Article.all.filter(obj => obj.author === author)
+                                  .map(obj => obj.body).length, // DONE: Complete these three FP methods.
+        }
+      })
+    };
+
 
 Article.truncateTable = callback => {
   $.ajax({
@@ -126,3 +144,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.Article = Article;
+}) (window);
