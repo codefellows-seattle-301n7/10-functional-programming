@@ -20,7 +20,6 @@ articleView.populateFilters = function() {
       }
     }
   });
-};
 
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
@@ -141,3 +140,4 @@ var template = Handlebars.compile($('#admin-template').text());
   $('#blog-stats .articles').text(Article.all.length);
   $('#blog-stats .words').text(Article.numWordsAll());
 };
+})(window);

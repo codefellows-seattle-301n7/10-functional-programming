@@ -19,7 +19,7 @@ function Article(rawDataObj) {
   the function.
   As a result, we no longer have to pass in the optional "this" argument to forEach!*/
   Object.keys(rawDataObj).forEach(key => this[key] = rawDataObj[key]);
-}
+
 
 Article.all = [];
 
@@ -134,3 +134,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.article=article
+})(window);
