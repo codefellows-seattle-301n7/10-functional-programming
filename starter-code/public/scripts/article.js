@@ -74,9 +74,9 @@ Article.numWordsAll = () => {
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
   return Article.all.map(authNames=>{
-    authNames.author;
+    return authNames.author;
   }).reduce((acc, auth) => {
-    return (acc.indexOf(auth) < 0) ? acc.concat([auth]) : acc;
+    return (acc.indexOf(auth) === -1) ? acc.concat([auth]) : acc;
   },[]);
 };
 
