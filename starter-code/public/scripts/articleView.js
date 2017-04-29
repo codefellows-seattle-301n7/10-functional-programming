@@ -3,25 +3,25 @@
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Pass in to the IIFE a module, upon which objects can be attached for later access.
 (function(module) {
-var articleView = {};
+  var articleView = {};
+  module.articleView = articleView;
+  articleView.populateFilters = function() {
+    $('article').each(function() {
+      if (!$(this).hasClass('template')) {
+        var val = $(this).find('address a').text();
+        var optionTag = `<option value="${val}">${val}</option>`;
+        if ($(`#author-filter option[value="${val}"]`).length === 0) {
+          $('#author-filter').append(optionTag);
+        }
 
-articleView.populateFilters = function() {
-  $('article').each(function() {
-    if (!$(this).hasClass('template')) {
-      var val = $(this).find('address a').text();
-      var optionTag = `<option value="${val}">${val}</option>`;
-      if ($(`#author-filter option[value="${val}"]`).length === 0) {
-        $('#author-filter').append(optionTag);
+        val = $(this).attr('data-category');
+        optionTag = `<option value="${val}">${val}</option>`;
+        if ($(`#category-filter option[value="${val}"]`).length === 0) {
+          $('#category-filter').append(optionTag);
+        }
       }
-
-      val = $(this).attr('data-category');
-      optionTag = `<option value="${val}">${val}</option>`;
-      if ($(`#category-filter option[value="${val}"]`).length === 0) {
-        $('#category-filter').append(optionTag);
-      }
-    }
-  });
-};
+    });
+  };
 
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
