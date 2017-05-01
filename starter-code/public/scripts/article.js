@@ -5,6 +5,7 @@
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
++(function(module){
 function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
@@ -18,7 +19,7 @@ function Article(rawDataObj) {
   the function.
   As a result, we no longer have to pass in the optional "this" argument to forEach!*/
   Object.keys(rawDataObj).forEach(key => this[key] = rawDataObj[key]);
-}
+
 
 Article.all = [];
 
@@ -46,6 +47,10 @@ Article.loadAll = rows => {
 });
 */
 
+Article.all = rows.map(article => {
+  return new Article(article);
+})
+
 };
 
 Article.fetchAll = callback => {
@@ -60,13 +65,13 @@ Article.fetchAll = callback => {
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map().reduce()
+  return Article.all.map(article => {return article.body.split(' ').length}).reduce((total, current) => {return total + current;}, 0)
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  return Article.all.map(art => {return art.author}).reduce((arr, current) => { if(arr.indexOf(current) < 0){arr.push(current)} return arr},[]);
 };
 
 Article.numWordsByAuthor = () => {
@@ -78,7 +83,10 @@ Article.numWordsByAuthor = () => {
     // The first property should be pretty straightforward, but you will need to chain
     // some combination of filter, map, and reduce to get the value for the second
     // property.
-
+    return {
+      name: author,
+      numWords: Article.all.filter(ele => {return ele.author === author}).map(ele => {return ele.body.split(' ').length}).reduce((total, current) => {return total + current;}, 0)
+    }
   })
 };
 
@@ -126,3 +134,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.article=article
+})(window);
